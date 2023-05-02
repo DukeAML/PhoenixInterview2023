@@ -6,6 +6,9 @@ remove it (or parts of it) and have the interviewee fill in the missing parts. T
 scheduling algorithm, and then stores the resulting schedule in the database. 
 
 This code is almost a direct copy of parts of the backend on a branch of the KVille repo in the DukeAML Github page. 
+The entry point here is main.js, which first messes up the db, and then calls on createGroupSchedule to make a new 
+schedule. 
+
 ## Installation (copied from the Kville repo)
 
 1. Install Node and npm. It is recommended to install with version manager such as nvm. (Mac users can use brew). Please follow instructions on how to do so in the links below.
@@ -18,3 +21,6 @@ This code is almost a direct copy of parts of the backend on a branch of the KVi
 
 1. Install all packages/dependencies 
   - Run `yarn install`
+
+## Running the code
+Simply run node main.js in the terminal. 

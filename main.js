@@ -63,5 +63,5 @@ checkScheduledTenters(GROUP_CODE);
 //run the scheduler and print out who is scheduled afterwards
 createGroupSchedule.createGroupSchedule(GROUP_CODE, "Black", 1).then(() => {
     console.log("After fixing the schedule:");
-    checkScheduledTenters(GROUP_CODE);
+    checkScheduledTenters(GROUP_CODE).then(() => {console.log("Finished. You can terminate the program if it is still running")});
 });

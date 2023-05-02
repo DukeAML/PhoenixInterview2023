@@ -23,7 +23,7 @@ class Algorithm{
      *    There is a slot for EVERY TIME. The slot object says whether or not the person is available.
      * @param {*} weekNum (int) is the week number (e.g. 1, 2, 3, or 4)
      * @returns a 1d array of objects that each have a "startDate" (int), "endDate"(int), "phase"(String), 
-     *    "isNight" (boolean), and "ids"(1d array of integer ids)
+     *    "isNight" (boolean), and "ids"(1d array of string ids)
      */
     static schedule(people, scheduleGrid, weekNum = 1){
         Helpers.weekNum = weekNum;

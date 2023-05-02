@@ -9,10 +9,6 @@ const Algorithm = require("./Scheduling/algorithm");
 let GRACE;
 const MAXBLOCK = 8; //max half hours minus one (not including current time block) person can be scheduled for
 
-//Colors of each member, first is for 'empty'
-// prettier-ignore
-const colors = ['#ececec', '#3c78d8', '#dd7e6b', '#ea9999', '#f9cb9c', '#ffe599', '#b6d7a8', '#a2c4c9',
-  '#a4c2f4' , '#fed9c9', '#b4a7d6', '#d5a6bd', '#e69138', '#6aa84f'];
 
 
 /**
@@ -24,12 +20,6 @@ const colors = ['#ececec', '#3c78d8', '#dd7e6b', '#ea9999', '#f9cb9c', '#ffe599'
  *    where each string is like "Alvin Keith Nick", representing the people in the tent at that time. 
  */
 async function createGroupSchedule(groupCode, tentType, weekNum){
-  var memberIDs = [{ id: '12345', name: 'empty', color: '#ececec', changedHrs: 0 },
-  {id: '6789', name: 'Grace', color:'#3c78d8', changedHrs:0}];
-  if ((tentType != "Blue") && (tentType != "Black")){
-    tentType = "White"; 
-  }
-
   var people = new Array();
   var scheduleGrid = new Array();
   var idToName = {};
@@ -47,33 +37,24 @@ async function createGroupSchedule(groupCode, tentType, weekNum){
         var id = doc.id;
         idToName[id] = name;
         var availability = doc.data().availability; //array of boolean values indicating availability
-        //Keith: make slot objects out of all of these availabilities
+        
+        // make slot objects out of all of these availabilities
         var user_slots = Helpers.availabilitiesToSlots(id, availability, tentType, people.length)
         scheduleGrid.push(user_slots); 
 
-        //Kevin/Alvin: member name and id object (used to update hrs in schedule page)
-        var member = {
-          id,
-          name,
-          color: '',
-          changedHrs: 0,
-        };
-        memberIDs.push(member);
 
         var [numFreeDaySlots, numFreeNightSlots] = Helpers.dayNightFree(availability);
-        //Keith: For now, can just say dayScheduled and nightScheduled = 0
+
         var person = new Person(id, name, numFreeDaySlots, numFreeNightSlots, 0, 0);
         people.push(person);
       });
     });
 
+
   var slot_info = Algorithm.schedule(people, scheduleGrid, weekNum);
  
-
-
-
   
-  //Keith: now need to return the array of strings
+  //now need to get an array of strings to push to the db
   var groupScheduleArr = [];
   for (var i = 0; i < slot_info.length; i++){
     var ids = slot_info[i].ids;
@@ -86,6 +67,8 @@ async function createGroupSchedule(groupCode, tentType, weekNum){
     }
     groupScheduleArr.push(names);
   }
+
+  //push new schedule to the db
   await firebase
   .firestore()
   .collection('groups')
